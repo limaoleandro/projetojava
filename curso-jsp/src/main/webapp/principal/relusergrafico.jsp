@@ -160,52 +160,38 @@
 		}
 
 		$(function() {
+		    function formatarData(input) {
+		        // Remove todos os caracteres não numéricos
+		        var rawValue = input.value.replace(/\D/g, '');
 
-			$("#dataInicial")
-					.datepicker(
-							{
-								dateFormat : 'dd/mm/yy',
-								dayNames : [ 'Domingo', 'Segunda', 'Terça',
-										'Quarta', 'Quinta', 'Sexta', 'Sábado' ],
-								dayNamesMin : [ 'D', 'S', 'T', 'Q', 'Q', 'S',
-										'S', 'D' ],
-								dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua',
-										'Qui', 'Sex', 'Sáb', 'Dom' ],
-								monthNames : [ 'Janeiro', 'Fevereiro', 'Março',
-										'Abril', 'Maio', 'Junho', 'Julho',
-										'Agosto', 'Setembro', 'Outubro',
-										'Novembro', 'Dezembro' ],
-								monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr',
-										'Mai', 'Jun', 'Jul', 'Ago', 'Set',
-										'Out', 'Nov', 'Dez' ],
-								nextText : 'Próximo',
-								prevText : 'Anterior'
-							});
+		        // Adiciona a barra de separação
+		        var formattedValue = rawValue.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
+
+		        // Define o valor formatado de volta no campo
+		        input.value = formattedValue;
+		    }
+
+		    $("#dataInicial, #dataFinal").datepicker({
+		        dateFormat: 'dd/mm/yy',
+		        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+		        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+		        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+		        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+		        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+		        nextText: 'Próximo',
+		        prevText: 'Anterior',
+		        onSelect: function(dateText, inst) {
+		            // Ao selecionar uma data, formatamos o valor
+		            formatarData(inst.input[0]);
+		        }
+		    });
+
+		    // Monitora as alterações no input e formata a data automaticamente
+		    $("#dataInicial, #dataFinal").on('input', function() {
+		        formatarData(this);
+		    });
 		});
 
-		$(function() {
-
-			$("#dataFinal")
-					.datepicker(
-							{
-								dateFormat : 'dd/mm/yy',
-								dayNames : [ 'Domingo', 'Segunda', 'Terça',
-										'Quarta', 'Quinta', 'Sexta', 'Sábado' ],
-								dayNamesMin : [ 'D', 'S', 'T', 'Q', 'Q', 'S',
-										'S', 'D' ],
-								dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua',
-										'Qui', 'Sex', 'Sáb', 'Dom' ],
-								monthNames : [ 'Janeiro', 'Fevereiro', 'Março',
-										'Abril', 'Maio', 'Junho', 'Julho',
-										'Agosto', 'Setembro', 'Outubro',
-										'Novembro', 'Dezembro' ],
-								monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr',
-										'Mai', 'Jun', 'Jul', 'Ago', 'Set',
-										'Out', 'Nov', 'Dez' ],
-								nextText : 'Próximo',
-								prevText : 'Anterior'
-							});
-		});
 	</script>
 </body>
 

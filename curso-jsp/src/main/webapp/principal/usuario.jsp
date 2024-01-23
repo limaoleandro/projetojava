@@ -99,10 +99,10 @@
 																	class="form-control" required="required"
 																	value="${modolLogin.cpf}"> <span
 																	class="form-bar"></span> <label class="float-label">CPF:</label>
-																	<span id="cpf-error-msg" class="error-message"></span>
+																<span id="cpf-error-msg" class="error-message"></span>
 															</div>
-															
-															
+
+
 
 
 															<div class="form-group form-default form-static-label">
@@ -334,9 +334,9 @@ if (modelLogin != null && modelLogin.getSexo().equals("FEMININO")) {
 								<div id="styleSelector"></div>
 							</div>
 						</div>
-						
-						
-						
+
+
+
 					</div>
 				</div>
 			</div>
@@ -484,11 +484,15 @@ if (modelLogin != null && modelLogin.getSexo().equals("FEMININO")) {
 
 		var dataNascimento = $("#dataNascimento").val();
 
-		var dateFormat = new Date(dataNascimento);
+		if (dataNascimento != null && dataNascimento !='') {
 
-		$("#dataNascimento").val(dateFormat.toLocaleDateString('pt-BR', {
-			timeZone : 'UTC'
-		}));
+			var dateFormat = new Date(dataNascimento);
+
+			$("#dataNascimento").val(dateFormat.toLocaleDateString('pt-BR', {
+				timeZone : 'UTC'
+			}));
+
+		}
 
 		$("#nome").focus();
 

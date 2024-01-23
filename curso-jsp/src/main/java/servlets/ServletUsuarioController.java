@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.tomcat.jakartaee.commons.compress.utils.IOUtils;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
@@ -217,8 +217,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 				String dataFinal = request.getParameter("dataFinal");
 
 				if (dataInicial == null || dataInicial.isEmpty() && dataFinal == null || dataFinal.isEmpty()) {
-					
-					
+
 					BeanDtoGraficoSalarioUser beanDtoGraficoSalarioUser = daoUsuarioRepository
 							.montarGraficoMediaSalario(super.getUserLogado(request));
 
@@ -229,7 +228,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 					response.getWriter().write(json);
 
 				} else {
-					
+
 					BeanDtoGraficoSalarioUser beanDtoGraficoSalarioUser = daoUsuarioRepository
 							.montarGraficoMediaSalario(super.getUserLogado(request), dataInicial, dataFinal);
 
@@ -238,8 +237,6 @@ public class ServletUsuarioController extends ServletGenericUtil {
 					String json = mapper.writeValueAsString(beanDtoGraficoSalarioUser);
 
 					response.getWriter().write(json);
-
-					
 
 				}
 
