@@ -6,18 +6,21 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import connection.SingleConnectionBanco;
 import dao.DaoVersionadorBanco;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+
 
 @WebFilter(urlPatterns = { "/principal/*" }) /* Interceptas todas as requisi�oes que vierem do projeto ou mapeamento */
 public class FilterAutenticacao implements Filter {
@@ -50,22 +53,22 @@ public class FilterAutenticacao implements Filter {
 
 			String usuarioLogado = (String) session.getAttribute("usuario");
 
-			String urlParaAutenticar = req.getServletPath();/* Url que est� sendo acessada */
+			String urlParaAutenticar = req.getServletPath();/* Url que esta sendo acessada */
 
-			/* Validar se est� logado sen�o redireciona para a tela de login */
+			/* Validar se esta logado sendo redireciona para a tela de login */
 			if (usuarioLogado == null
-					&& !urlParaAutenticar.equalsIgnoreCase("/principal/ServletLogin")) {/* N�o est� logado */
+					&& !urlParaAutenticar.equalsIgnoreCase("/principal/ServletLogin")) {/* nao está sendo logado */
 
 				RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
 				request.setAttribute("msg", "Por favor realize o login!");
 				redireciona.forward(request, response);
-				return; /* Para a execu��o e redireciona para o login */
+				return; /* Para a execucao e redireciona para o login */
 
 			} else {
 				chain.doFilter(request, response);
 			}
 
-			connection.commit();/* Deu tudo certo, ent�o comita as alteracoes no banco de dados */
+			connection.commit();/* Deu tudo certo, entao comita as alteracoes no banco de dados */
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,7 +86,7 @@ public class FilterAutenticacao implements Filter {
 	}
 
 	/* Inicia os processo ou recursos quando o servidor sobre o projeto */
-	// inicar a conex�o com o banco
+	// inicar a conexao com o banco
 	public void init(FilterConfig fConfig) throws ServletException {
 		connection = SingleConnectionBanco.getConnection();
 
