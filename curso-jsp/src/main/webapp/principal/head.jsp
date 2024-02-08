@@ -40,7 +40,6 @@
       
       <link href="https://code.jquery.com/ui/1.9.1/themes/smoothness/jquery-ui.css" rel="stylesheet">
       
-      
   </head>
   
     

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>   
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,38 +46,34 @@
 													<div class="card-block">
 														<h4 class="sub-title">Rel. Usuário</h4>
 
-														<form class="form-material"
+														<form class="form-material" 
 															action="<%=request.getContextPath()%>/ServletUsuarioController"
 															method="get" id="formUser">
-
-															<input type="hidden" id="acaoRelatorioImprimirTipo"
-																name="acao" value="imprimirRelatorioUser">
+															
+															<input type="hidden" id="acaoRelatorioImprimirTipo"  name="acao" value="imprimirRelatorioUser">
 
 															<div class="form-row align-items-center">
-
+															
 																<div class="col-sm-3 my-1">
-																	<label class="sr-only" for="dataInicial">Data
-																		Inicial</label> <input value="${dataInicial}" type="text"
-																		class="form-control" id="dataInicial"
-																		name="dataInicial">
+																	<label class="sr-only" for="dataInicial">Data Inicial</label>
+																	<input value="${dataInicial}" type="text" class="form-control" id="dataInicial" name="dataInicial">
 																</div>
-
+																
 																<div class="col-sm-3 my-1">
-																	<label class="sr-only" for="dataFinal">Data
-																		Final</label> <input value="${dataFinal}" type="text"
-																		class="form-control" id="dataFinal" name="dataFinal">
-
+																	<label class="sr-only" for="dataFinal">Data Final</label>
+																	
+																		<input value="${dataFinal}" type="text" class="form-control" id="dataFinal" name="dataFinal">
+																	
 																</div>
 
 																<div class="col-auto my-1">
-																	<button type="button" onclick="gerarGrafico();"
-																		class="btn btn-primary">Gerar Gráfico</button>
+																	<button type="button" onclick="gerarGrafico();" class="btn btn-primary">Gerar Gráfico</button>
 																</div>
 															</div>
 
 														</form>
-
-
+														
+														
 														<div style="height: 500px; overflow: scroll;">
 
 															<div>
@@ -105,94 +101,97 @@
 
 
 	<jsp:include page="javascripfile.jsp"></jsp:include>
+	
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	
+<script type="text/javascript">
 
 
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+var myChart = new Chart(document.getElementById('myChart'));
 
-	<script type="text/javascript">
-		var myChart = new Chart(document.getElementById('myChart'));
+function gerarGrafico() {
+    
+    
+     var urlAction = document.getElementById('formUser').action;
+     var dataInicial = document.getElementById('dataInicial').value;
+     var dataFinal = document.getElementById('dataFinal').value;
+     
+	 $.ajax({
+	     
+	     method: "get",
+	     url : urlAction,
+	     data : "dataInicial=" + dataInicial + '&dataFinal=' + dataFinal + '&acao=graficoSalario',
+	     success: function (response) {
+		 
+		    var json = JSON.parse(response);
+		    
+		    myChart.destroy();
+		
+		    myChart = new Chart(
+			    document.getElementById('myChart'),
+			    {
+				  type: 'line',
+				  data: {
+				      labels: json.perfils,
+				      datasets: [{
+				        label: 'Gráfico de média salarial por tipo',
+				        backgroundColor: 'rgb(255, 99, 132)',
+				        borderColor: 'rgb(255, 99, 132)',
+				        data: json.salarios,
+				      }]
+				    },
+				  options: {}
+				}
+			);
+		  
+	     }
+	     
+	 }).fail(function(xhr, status, errorThrown){
+	    alert('Erro ao buscar dados para o grafico ' + xhr.responseText);
+	 });
+    
+    
+    
+    
 
-		function gerarGrafico() {
+    
+}
 
-			var urlAction = document.getElementById('formUser').action;
-			var dataInicial = document.getElementById('dataInicial').value;
-			var dataFinal = document.getElementById('dataFinal').value;
 
-			$
-					.ajax(
-							{
 
-								method : "get",
-								url : urlAction,
-								data : "dataInicial=" + dataInicial
-										+ '&dataFinal=' + dataFinal
-										+ '&acao=graficoSalario',
-								success : function(response) {
-
-									var json = JSON.parse(response);
-
-									myChart.destroy();
-
-									myChart = new Chart(
-											document.getElementById('myChart'),
-											{
-												type : 'line',
-												data : {
-													labels : json.perfils,
-													datasets : [ {
-														label : 'Gráfico de média salarial por tipo',
-														backgroundColor : 'rgb(255, 99, 132)',
-														borderColor : 'rgb(255, 99, 132)',
-														data : json.salarios,
-													} ]
-												},
-												options : {}
-											});
-
-								}
-
-							}).fail(
-							function(xhr, status, errorThrown) {
-								alert('Erro ao buscar dados para o grafico '
-										+ xhr.responseText);
-							});
-
-		}
-
-		$(function() {
-		    function formatarData(input) {
-		        // Remove todos os caracteres não numéricos
-		        var rawValue = input.value.replace(/\D/g, '');
-
-		        // Adiciona a barra de separação
-		        var formattedValue = rawValue.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
-
-		        // Define o valor formatado de volta no campo
-		        input.value = formattedValue;
-		    }
-
-		    $("#dataInicial, #dataFinal").datepicker({
-		        dateFormat: 'dd/mm/yy',
-		        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-		        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-		        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-		        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-		        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-		        nextText: 'Próximo',
-		        prevText: 'Anterior',
-		        onSelect: function(dateText, inst) {
-		            // Ao selecionar uma data, formatamos o valor
-		            formatarData(inst.input[0]);
-		        }
-		    });
-
-		    // Monitora as alterações no input e formata a data automaticamente
-		    $("#dataInicial, #dataFinal").on('input', function() {
-		        formatarData(this);
-		    });
+$( function() {
+	  
+	  $("#dataInicial").datepicker({
+		    dateFormat: 'dd/mm/yy',
+		    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+		    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+		    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+		    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+		    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+		    nextText: 'Próximo',
+		    prevText: 'Anterior'
 		});
+} );
 
-	</script>
+
+
+$( function() {
+	  
+	  $("#dataFinal").datepicker({
+		    dateFormat: 'dd/mm/yy',
+		    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+		    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+		    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+		    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+		    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+		    nextText: 'Próximo',
+		    prevText: 'Anterior'
+		});
+} );
+
+
+</script>	
 </body>
 
 </html>

@@ -15,15 +15,15 @@ public class DaoVersionadorBanco implements Serializable {
 
 	public DaoVersionadorBanco() {
 		connection = SingleConnectionBanco.getConnection();
-
 	}
 
-	public void gravaSqlRodado(String nome_file) throws Exception {
+	public void gravaArquivoSqlRodado(String nome_file) throws Exception {
 
-		String sql = "INSERT INTO versionadorbanco(arquivo_sql)VALUES (?);";
+		String sql = "INSERT INTO versionadorbanco(arquivo_sql) VALUES (?);";
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		preparedStatement.setString(1, nome_file);
 		preparedStatement.execute();
+
 	}
 
 	public boolean arquivoSqlRodado(String nome_do_arquivo) throws Exception {

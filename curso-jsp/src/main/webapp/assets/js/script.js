@@ -226,6 +226,7 @@ function toggleFullScreen() {
     }
 }
 
+
 var $window = $(window);
 var nav = $('.fixed-button');
 $window.scroll(function() {
