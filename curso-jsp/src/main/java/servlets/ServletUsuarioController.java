@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.tomcat.jakartaee.commons.compress.utils.IOUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.poi.util.IOUtils;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -133,9 +133,11 @@ public class ServletUsuarioController extends ServletGenericUtil {
 
 					response.setHeader("Content-Disposition",
 							"attachment;filename=arquivo." + modelLogin.getExtensaofotouser());
-					response.getOutputStream()
-							.write(new Base64().decodeBase64(modelLogin.getFotouser().split("\\,")[1]));
 
+					// Decodificar a imagem Base64 e obter os bytes
+					byte[] fotoBytes = Base64.getDecoder().decode(modelLogin.getFotouser().split(",")[1]);
+
+					response.getOutputStream().write(fotoBytes);
 				}
 
 			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("paginar")) {
@@ -194,6 +196,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 				params.put("PARAM_SUB_REPORT", request.getServletContext().getRealPath("relatorio") + File.separator);
 
 				byte[] relatorio = null;
+				@SuppressWarnings("unused")
 				String extensao = "";
 
 				if (acao.equalsIgnoreCase("imprimirRelatorioPDF")) {
@@ -306,19 +309,22 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			modelLogin.setComplemento(complemento);
 			modelLogin.setCpf(cpf);
 
-			if (ServletFileUpload.isMultipartContent(request)) {
-
-				Part part = request.getPart("fileFoto"); /* Pega foto da tela */
+			if (ServletFileUpload.isMultipartContent((HttpServletRequest) request)) {
+				Part part = request.getPart("fileFoto"); // Pega foto da tela
 
 				if (part.getSize() > 0) {
-					byte[] foto = IOUtils.toByteArray(part.getInputStream()); /* Converte imagem para byte */
-					String imagemBase64 = "data:image/" + part.getContentType().split("\\/")[1] + ";base64,"
-							+ new Base64().encodeBase64String(foto);
+					byte[] foto = IOUtils.toByteArray(part.getInputStream()); // Converte imagem para byte
+
+					// Obter a extensão do tipo de conteúdo do arquivo
+					String contentType = part.getContentType();
+					String extensao = contentType.substring(contentType.lastIndexOf('/') + 1);
+
+					String imagemBase64 = "data:image/" + extensao + ";base64,"
+							+ Base64.getEncoder().encodeToString(foto);
 
 					modelLogin.setFotouser(imagemBase64);
-					modelLogin.setExtensaofotouser(part.getContentType().split("\\/")[1]);
+					modelLogin.setExtensaofotouser(extensao);
 				}
-
 			}
 
 			if (daoUsuarioRepository.validarLogin(modelLogin.getLogin()) && modelLogin.getId() == null) {
