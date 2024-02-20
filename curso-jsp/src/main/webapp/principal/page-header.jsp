@@ -7,7 +7,7 @@
                               <div class="row align-items-center">
                                   <div class="col-md-8">
                                       <div class="page-header-title">
-                                          <h5 class="m-b-10">Projeto Java Jdev Treinamento</h5>
+                                          <h5 class="m-b-10">Pagina de Cadastro de Usuários</h5>
                                           <p class="m-b-0">Bem vindo!</p>
                                       </div>
                                   </div>
@@ -16,7 +16,7 @@
                                           <li class="breadcrumb-item">
                                               <a href="index.html"> <i class="fa fa-home"></i> </a>
                                           </li>
-                                          <li class="breadcrumb-item"><a href="#!">Projeto Java EE</a>
+                                          <li class="breadcrumb-item"><a href="#!">Projeto Leandro</a>
                                           </li>
                                       </ul>
                                   </div>

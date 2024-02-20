@@ -102,7 +102,7 @@ public class SertvletTelefone extends ServletGenericUtil {
 				request.setAttribute("msg", "Salvo com sucesso");
 			
 			}else {
-				request.setAttribute("msg", "Telefone j· existe");
+				request.setAttribute("msg", "Telefone j√° existe");
 			}
 			
 				List<ModelTelefone> modelTelefones = daoTelefoneRepository.listFone(Long.parseLong(usuario_pai_id));
