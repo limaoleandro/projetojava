@@ -55,8 +55,8 @@ public class ServletUsuarioController extends ServletGenericUtil {
 
 				List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
 				request.setAttribute("modelLogins", modelLogins);
-
 				request.setAttribute("msg", "Excluido com sucesso!");
+				
 				request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
 				request.getRequestDispatcher("principal/usuario.jsp").forward(request, response);
 			} 
@@ -69,7 +69,7 @@ public class ServletUsuarioController extends ServletGenericUtil {
 
 				daoUsuarioRepository.deletarUser(idUser);
 
-				response.getWriter().write("Excluido com sucesso!");
+				response.getWriter().write("Excluído com sucesso");
 
 			}
 
@@ -348,36 +348,6 @@ public class ServletUsuarioController extends ServletGenericUtil {
 
 	}
 
-	// Método adicionado para excluir usuário com verificação de telefone
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
-	    try {
-	        String idUsuario = request.getParameter("id");
-
-	        // Verificar se o usuário possui telefone(s) cadastrado(s)
-	        if (usuarioTemTelefonesCadastrados(idUsuario)) {
-	            String mensagemErro = "Não é possível excluir este usuário pois ele possui telefone(s) cadastrado(s).";
-	            request.setAttribute("msg", mensagemErro);
-	            // Redirecionar de volta para a página JSP
-	            RequestDispatcher dispatcher = request.getRequestDispatcher("/sua-pagina.jsp");
-	            dispatcher.forward(request, response);
-	            return;
-	        }
-
-	        daoUsuarioRepository.deletarUsuario(idUsuario);
-	        response.getWriter().write("Excluído com sucesso!");
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-	                "Erro ao excluir usuário: " + e.getMessage());
-	    }
-	}
-
-
-
-	private boolean usuarioTemTelefonesCadastrados(String idUsuario) {
-		return false;
-	}
-
+	
 
 }

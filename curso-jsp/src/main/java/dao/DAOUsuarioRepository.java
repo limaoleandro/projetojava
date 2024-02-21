@@ -84,38 +84,31 @@ public class DAOUsuarioRepository {
 
 		return beanDtoGraficoSalarioUser;
 	}
-	
+
 	public boolean validarCampos(ModelLogin objeto) {
-	    // Verifica se há algum campo em branco
-	    if (objeto.getLogin() == null || objeto.getLogin().isEmpty() ||
-	        objeto.getSenha() == null || objeto.getSenha().isEmpty() ||
-	        objeto.getNome() == null || objeto.getNome().isEmpty() ||
-	        objeto.getEmail() == null || objeto.getEmail().isEmpty() ||
-	        objeto.getPerfil() == null || objeto.getPerfil().isEmpty() ||
-	        objeto.getSexo() == null || objeto.getSexo().isEmpty() ||
-	        objeto.getCep() == null || objeto.getCep().isEmpty() ||
-	        objeto.getLogradouro() == null || objeto.getLogradouro().isEmpty() ||
-	        objeto.getBairro() == null || objeto.getBairro().isEmpty() ||
-	        objeto.getLocalidade() == null || objeto.getLocalidade().isEmpty() ||
-	        objeto.getUf() == null || objeto.getUf().isEmpty() ||
-	        objeto.getNumero() == null || objeto.getNumero().isEmpty() ||
-	        objeto.getDataNascimento() == null ||
-	        objeto.getRendamensal() == null ||
-	        objeto.getCpf() == null || objeto.getCpf().isEmpty()||
-	        objeto.getComplemento() == null || objeto.getComplemento().isEmpty()) 
-	    		    
-	    {
-	        return false; // Retorna falso se algum campo estiver em branco
-	    }
-	    return true; // Retorna verdadeiro se todos os campos estiverem preenchidos
+		// Verifica se há algum campo em branco
+		if (objeto.getLogin() == null || objeto.getLogin().isEmpty() || objeto.getSenha() == null
+				|| objeto.getSenha().isEmpty() || objeto.getNome() == null || objeto.getNome().isEmpty()
+				|| objeto.getEmail() == null || objeto.getEmail().isEmpty() || objeto.getPerfil() == null
+				|| objeto.getPerfil().isEmpty() || objeto.getSexo() == null || objeto.getSexo().isEmpty()
+				|| objeto.getCep() == null || objeto.getCep().isEmpty() || objeto.getLogradouro() == null
+				|| objeto.getLogradouro().isEmpty() || objeto.getBairro() == null || objeto.getBairro().isEmpty()
+				|| objeto.getLocalidade() == null || objeto.getLocalidade().isEmpty() || objeto.getUf() == null
+				|| objeto.getUf().isEmpty() || objeto.getNumero() == null || objeto.getNumero().isEmpty()
+				|| objeto.getDataNascimento() == null || objeto.getRendamensal() == null || objeto.getCpf() == null
+				|| objeto.getCpf().isEmpty() || objeto.getComplemento() == null || objeto.getComplemento().isEmpty())
+
+		{
+			return false; // Retorna falso se algum campo estiver em branco
+		}
+		return true; // Retorna verdadeiro se todos os campos estiverem preenchidos
 	}
 
 	public ModelLogin gravarUsuario(ModelLogin objeto, Long userLogado) throws Exception {
-		
+
 		if (!validarCampos(objeto)) {
-	        System.out.println("Não é possível gravar no banco de dados, campos em branco.");
-	        return null;
-	    }
+			return null;
+		}
 
 		if (objeto.isNovo()) {/* Grava um novo */
 
@@ -643,23 +636,22 @@ public class DAOUsuarioRepository {
 	}
 
 	public void deletarUser(String idUser) throws Exception {
-	    // Primeiro, verifique se o usuário possui telefones cadastrados
-	    List<ModelTelefone> telefones = listFone(Long.parseLong(idUser));
-	    if (!telefones.isEmpty()) {
-	        System.out.println("Não é possível excluir este usuário pois ele possui telefone(s) cadastrado(s).");
-	        return;
-	    }
+		// Primeiro, verifique se o usuário possui telefones cadastrados
+		List<ModelTelefone> telefones = listFone(Long.parseLong(idUser));
+		if (!telefones.isEmpty()) {
+			return;
+		}
 
-	    // Se o usuário não tiver telefones cadastrados, prossiga com a exclusão
-	    String sql = "DELETE FROM model_login WHERE id = ? and useradmin is false;";
+		// Se o usuário não tiver telefones cadastrados, prossiga com a exclusão
+		String sql = "DELETE FROM model_login WHERE id = ? and useradmin is false;";
 
-	    PreparedStatement prepareSql = connection.prepareStatement(sql);
+		PreparedStatement prepareSql = connection.prepareStatement(sql);
 
-	    prepareSql.setLong(1, Long.parseLong(idUser));
+		prepareSql.setLong(1, Long.parseLong(idUser));
 
-	    prepareSql.executeUpdate();
+		prepareSql.executeUpdate();
 
-	    connection.commit();
+		connection.commit();
 	}
 
 	public List<ModelTelefone> listFone(Long idUserPai) throws Exception {
@@ -688,35 +680,32 @@ public class DAOUsuarioRepository {
 
 		return retorno;
 	}
-	
+
 	public boolean usuarioTemTelefonesCadastrados(String idUsuario) throws SQLException {
-	    String sql = "SELECT COUNT(*) FROM telefone WHERE usuario_pai_id = ?";
-	    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	    preparedStatement.setLong(1, Long.parseLong(idUsuario));
-	    ResultSet resultSet = preparedStatement.executeQuery();
-	    if (resultSet.next()) {
-	        int count = resultSet.getInt(1);
-	        return count > 0;
-	    }
-	    return false;
+		String sql = "SELECT COUNT(*) FROM telefone WHERE usuario_pai_id = ?";
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setLong(1, Long.parseLong(idUsuario));
+		ResultSet resultSet = preparedStatement.executeQuery();
+		if (resultSet.next()) {
+			int count = resultSet.getInt(1);
+			return count > 0;
+		}
+		return false;
 	}
 
 	public void deletarUsuario(String idUsuario) throws SQLException {
-	    // Primeiro, verifique se o usuário possui telefones cadastrados
-	    if (usuarioTemTelefonesCadastrados(idUsuario)) {
-	    	
-	        System.out.println("Não é possível excluir este usuário pois ele possui telefone(s) cadastrado(s).");
-	        return;
-	    }
+		// Primeiro, verifique se o usuário possui telefones cadastrados
+		if (usuarioTemTelefonesCadastrados(idUsuario)) {
 
-	    // Se o usuário não tiver telefones cadastrados, prossiga com a exclusão
-	    String sql = "DELETE FROM model_login WHERE id = ? and useradmin is false;";
-	    PreparedStatement prepareSql = connection.prepareStatement(sql);
-	    prepareSql.setLong(1, Long.parseLong(idUsuario));
-	    prepareSql.executeUpdate();
-	    connection.commit();
+			return;
+		}
+
+		// Se o usuário não tiver telefones cadastrados, prossiga com a exclusão
+		String sql = "DELETE FROM model_login WHERE id = ? and useradmin is false;";
+		PreparedStatement prepareSql = connection.prepareStatement(sql);
+		prepareSql.setLong(1, Long.parseLong(idUsuario));
+		prepareSql.executeUpdate();
+		connection.commit();
 	}
-	
-	
 
 }
