@@ -339,6 +339,7 @@ b, strong {
   position: relative;
   border-radius: 0;
   color: #fff; }
+  
   .page-header:before {
     content: "";
     background-color: rgba(0, 0, 0, 0.5);

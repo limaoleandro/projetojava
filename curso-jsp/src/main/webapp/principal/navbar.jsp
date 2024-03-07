@@ -19,7 +19,7 @@
                               </div>
                           </div>
                       </div>
-                      <a href="index.html">
+                      <a href="<%=request.getContextPath() %>/principal/principal.jsp">
                           <img width="40px" class="img-fluid" src="<%= request.getContextPath() %>/assets/images/logo.jpg" alt="Theme-Logo" />
                       </a>
                       <a class="mobile-options waves-effect waves-light">
@@ -116,3 +116,7 @@
                   </div>
               </div>
           </nav>
+          <div class="footer">
+			<p>© 2024 - LEANDRO DE OLIVEIRA LIMA - Todos os direitos
+				reservados</p>
+		</div>

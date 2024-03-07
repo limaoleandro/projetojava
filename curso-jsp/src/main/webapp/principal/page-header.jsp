@@ -14,9 +14,9 @@
                                   <div class="col-md-4">
                                       <ul class="breadcrumb-title">
                                           <li class="breadcrumb-item">
-                                              <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                              <a href="<%=request.getContextPath() %>/principal/principal.jsp"> <i class="fa fa-home"></i> </a>
                                           </li>
-                                          <li class="breadcrumb-item"><a href="#!">Projeto Leandro</a>
+                                          <li class="breadcrumb-item"><a href="<%=request.getContextPath() %>/principal/principal.jsp">Projeto Leandro</a>
                                           </li>
                                       </ul>
                                   </div>
