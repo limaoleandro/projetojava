@@ -9,7 +9,6 @@ public class SingleConnectionBanco {
 	private static String user = "postgres";
 	private static String senha = "admin";
 	private static Connection connection = null;
-	
 
 	/* dddfdfdd */
 	public static Connection getConnection() {

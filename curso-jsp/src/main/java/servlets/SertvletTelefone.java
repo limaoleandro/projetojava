@@ -51,8 +51,6 @@ public class SertvletTelefone extends ServletGenericUtil {
 		}
 		
 		
-			
-		
 		String iduser = request.getParameter("iduser");
 		
 		if (iduser != null && !iduser.isEmpty()) {
